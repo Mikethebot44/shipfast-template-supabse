@@ -11,7 +11,7 @@ export async function POST(req) {
   
   if (session) {
     const body = await req.json();
-    const { error } = await supabase
+    await supabase
     .from('user_created_polls')
     .delete()
     .eq('id', body.id)
