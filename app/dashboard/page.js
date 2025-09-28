@@ -8,7 +8,7 @@ import DashboardClient from "./DashboardClient";
 // It's a server compoment which means you can fetch data (like the user profile) before the page is rendered.
 // See https://shipfa.st/docs/tutorials/private-page
 export default async function Dashboard() {
-  const supabase = createServerComponentClient({ cookies });
+  createServerComponentClient({ cookies });
   return (
     <main className="min-h-screen p-8 pb-24">
       <section className="max-w-5xl mx-auto space-y-8">

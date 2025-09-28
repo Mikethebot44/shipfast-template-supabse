@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 
@@ -213,54 +213,54 @@ const DashboardClient = () => {
   const [myProducts, setMyProducts] = useState([]);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  const refreshAll = async () => {
-    await Promise.all([
-      refreshStats(),
-      refreshFeed(),
-      refreshSwaps(),
-      refreshMyProducts(),
-    ]);
-  };
-
-  const refreshStats = async () => {
+  const refreshStats = useCallback(async () => {
     try {
       const { data } = await axios.get('/api/adswap/stats');
       setStats(data || { completed: 0, pending: 0, credits: 0 });
     } catch (e) {
       setStats({ completed: 0, pending: 0, credits: 0 });
     }
-  };
+  }, []);
 
-  const refreshFeed = async () => {
+  const refreshFeed = useCallback(async () => {
     try {
       const { data } = await axios.get('/api/adswap/products/feed');
       setFeed(Array.isArray(data?.data) ? data.data : []);
     } catch (e) {
       setFeed([]);
     }
-  };
+  }, []);
 
-  const refreshSwaps = async () => {
+  const refreshSwaps = useCallback(async () => {
     try {
       const { data } = await axios.get('/api/adswap/swaps');
       setSwaps(Array.isArray(data?.data) ? data.data : []);
     } catch (e) {
       setSwaps([]);
     }
-  };
+  }, []);
 
-  const refreshMyProducts = async () => {
+  const refreshMyProducts = useCallback(async () => {
     try {
       const { data } = await axios.get('/api/adswap/products/mine');
       setMyProducts(Array.isArray(data?.data) ? data.data : []);
     } catch (e) {
       setMyProducts([]);
     }
-  };
+  }, []);
+
+  const refreshAll = useCallback(async () => {
+    await Promise.all([
+      refreshStats(),
+      refreshFeed(),
+      refreshSwaps(),
+      refreshMyProducts(),
+    ]);
+  }, [refreshStats, refreshFeed, refreshSwaps, refreshMyProducts]);
 
   useEffect(() => {
     refreshAll();
-  }, []);
+  }, [refreshAll]);
 
   const requestSwap = async (product) => {
     try {
