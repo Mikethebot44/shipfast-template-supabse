@@ -37,7 +37,9 @@ export async function GET() {
       if (creditRow && typeof creditRow.credits === 'number') {
         credits = creditRow.credits;
       }
-    } catch (_) {}
+    } catch (_) {
+      credits = 0;
+    }
 
     return NextResponse.json({
       completed: swapsCompleted?.length || 0,
